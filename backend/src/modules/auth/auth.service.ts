@@ -74,3 +74,32 @@ export async function signUp(data: {
     }
   });
 }
+
+export async function signIn(data: {
+  email: string;
+  password: string;
+}) {
+  const { email , password } = data;
+
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (!user) {
+    throw new Error ("Invalid Credentials");
+  }
+
+  const isValid = await bcrypt.compare(password , user.passwordHash);
+
+  if ( !isValid ) {
+    throw new Error("Invalid Password")
+  }
+
+  const token = genereateToken({
+    userId: user.id,
+    organizationId: user.organizationId,
+    role: user.role
+  })
+
+  return { token };
+}
