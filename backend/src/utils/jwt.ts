@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 
 export function genereateToken(payload: object) {
     const secret = process.env.JWT_SECRET;
+    // console.log("generate secret" , secret)
 
     if (!secret) {
         throw new Error("Jwt secret is not defined")
@@ -11,6 +12,7 @@ export function genereateToken(payload: object) {
 
 export function verifyToken(token: string) {
     const secret = process.env.JWT_SECRET;
+    // console.log("verify secret ", secret)
 
     if (!secret) {
         throw new Error("Jwt secret is not defined")
