@@ -1,26 +1,25 @@
 import { Router } from "express";
-import { addMember, getMembers } from "./member.controller";
-import { UsageMetric } from "@prisma/client";
 import { authenticate } from "../../middlewares/auth.middleware";
 import { requireActiveSubscription } from "../../middlewares/requireActiveSub.middleware";
 import { requireFeature } from "../../middlewares/requireFeature.middleware";
-import { requireUsageLimit } from "../../middlewares/requireUsage.middleware";
+import { getAdvancedAnalytics, getBasicAnalytics } from "./analytics.service";
 
 const router = Router();
 
-router.post(
+router.get(
   "/",
   authenticate,
   requireActiveSubscription,
-  requireFeature("ADD_MEMBER"),
-  requireUsageLimit(UsageMetric.MEMBER_COUNT),
-  addMember
+  requireFeature("VIEW_ANALYTICS"),
+  getBasicAnalytics
 );
 
 router.get(
-  "/all",
+  "/advanced",
   authenticate,
-  getMembers
-)
+  requireActiveSubscription,
+  requireFeature("ADVANCED_ANALYTICS"),
+  getAdvancedAnalytics
+);
 
-export default router;
+export default router

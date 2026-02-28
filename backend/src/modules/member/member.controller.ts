@@ -13,3 +13,12 @@ export async function addMember ( req: Request , res: Response) {
         res.status(400).json({ message: error.message })
     }
 }
+
+export async function getMembers ( req: Request , res: Response ) {
+    try {
+        const member = await memberService.getMembers( req.organizationId! )
+        res.status(200).json(member);
+    } catch (error: any) {
+        res.status(400).json({ message: "Error to get Members" })
+    }
+}

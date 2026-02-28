@@ -5,6 +5,7 @@ import authRoutes from "./modules/auth/auth.routes"
 import subscriptionRoutes from "./modules/subscriptions/subscription.routes"
 import projectRoutes from "./modules/project/project.routes"
 import memberRoutes from "./modules/member/member.routes"
+import analyticsRoutes from "./modules/analytics/analytics.routes"
 
 dotenv.config();
 
@@ -20,4 +21,5 @@ app.get("/health" , (_, res) => {
 app.use("/auth" , authRoutes);
 app.use("/subscription" , subscriptionRoutes);
 app.use("/projects" , projectRoutes);
-app.use("/members" , memberRoutes)
+app.use("/members" , memberRoutes);
+app.use("/analytics" , analyticsRoutes);
