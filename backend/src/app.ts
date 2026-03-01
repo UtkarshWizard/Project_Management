@@ -22,4 +22,4 @@ app.use("/auth" , authRoutes);
 app.use("/subscription" , subscriptionRoutes);
 app.use("/projects" , projectRoutes);
 app.use("/members" , memberRoutes);
-app.use("/analytics" , analyticsRoutes);
+// app.use("/analytics" , analyticsRoutes);
