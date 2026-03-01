@@ -214,7 +214,7 @@ The system is fully extensible without structural changes.
 ```bash
 git clone <your-repo-url>
 cd <project-folder>
-
+```
 **Backend**
 
 ```bash
@@ -238,9 +238,6 @@ npm run dev
 
 
 ## 🌍 Deployment
-
-**Backend:** (Add Render / Railway URL here)
-**Frontend:** (Add Vercel URL here)
 
 Deployment URL:
 [Add your deployed URL here]
