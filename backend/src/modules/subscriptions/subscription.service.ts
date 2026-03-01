@@ -36,8 +36,8 @@ export async function getCurrentSubscription ( organizationId: string ) {
         startDate: updated.startDate,
         endDate: updated.endDate,
         limits: {
-            maxProjects: updated.plan.maxProjects,
-            maxMembers: updated.plan.maxMembers,
+            maxProjects: updated.plan.maxProjects ?? null,
+            maxMembers: updated.plan.maxMembers ?? null,
         },
     }
 }

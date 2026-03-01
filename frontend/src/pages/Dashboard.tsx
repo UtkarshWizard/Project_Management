@@ -182,16 +182,20 @@ export default function Dashboard() {
                 <p className="text-4xl font-black mb-10">{subscription?.plan || "Free"}</p>
                 
                 <div className="space-y-6 mb-10">
-                  <UsageProgress 
-                    label="Projects" 
-                    current={stats?.projectCount || 0} 
-                    limit={subscription?.limits?.maxProjects || 3} 
-                  />
-                  <UsageProgress 
-                    label="Members" 
-                    current={stats?.memberCount || 0} 
-                    limit={subscription?.limits?.maxMembers || 1} 
-                  />
+                  {subscription?.limits?.maxProjects != null && (
+                    <UsageProgress 
+                      label="Projects" 
+                      current={stats?.projectCount || 0} 
+                      limit={subscription.limits.maxProjects} 
+                    />
+                  )}
+                  {subscription?.limits?.maxMembers != null && (
+                    <UsageProgress 
+                      label="Members" 
+                      current={stats?.memberCount || 0} 
+                      limit={subscription.limits.maxMembers} 
+                    />
+                  )}
                 </div>
                 
                 <Link to="/subscription">

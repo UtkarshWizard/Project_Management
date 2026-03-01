@@ -20,8 +20,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function Projects() {
   const [projects, setProjects] = useState<any[]>([]);
+  const [allProjects, setAllProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [subscription, setSubscription] = useState<any>(null);
+  const [view, setView] = useState<'all' | 'active' | 'archived'>('active');
   const [showCreate, setShowCreate] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -30,11 +32,14 @@ export default function Projects() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [{ data: projectsData }, { data: subData }] = await Promise.all([
+      const [{ data: projectsData }, { data: allProjectsData }, { data: subData }] = await Promise.all([
         api.get("/projects/all"),
+        api.get("/projects/all?archived=true"),
         api.get("/subscription")
       ]);
+
       setProjects(projectsData);
+      setAllProjects(allProjectsData);
       setSubscription(subData);
     } catch (error: any) {
       toast.error("Failed to load data.");
@@ -47,7 +52,8 @@ export default function Projects() {
     fetchData();
   }, []);
 
-  const limitReached = projects.length >= (subscription?.limits?.maxProjects || 0);
+  const totalProjectsCount = allProjects?.length ?? projects.length;
+  const limitReached = subscription?.limits?.maxProjects != null && totalProjectsCount >= subscription.limits.maxProjects;
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,6 +113,29 @@ export default function Projects() {
 
   return (
     <div className="space-y-8">
+      <div className="flex items-center gap-3">
+        <div className="flex rounded-xl bg-white/10 p-1">
+          <button
+            onClick={() => setView('active')}
+            className={`px-4 py-2 rounded-lg font-medium ${view === 'active' ? 'bg-primary-500 text-white' : 'text-slate-500'}`}
+          >
+            Active
+          </button>
+          <button
+            onClick={() => setView('archived')}
+            className={`px-4 py-2 rounded-lg font-medium ${view === 'archived' ? 'bg-primary-500 text-white' : 'text-slate-500'}`}
+          >
+            Archived
+          </button>
+          <button
+            onClick={() => setView('all')}
+            className={`px-4 py-2 rounded-lg font-medium ${view === 'all' ? 'bg-primary-500 text-white' : 'text-slate-500'}`}
+          >
+            All
+          </button>
+        </div>
+        <div className="text-sm text-slate-500">Total projects: {totalProjectsCount}</div>
+      </div>
       {limitReached && (
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
@@ -181,14 +210,16 @@ export default function Projects() {
           animate={{ opacity: 1 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {projects.map((project: any) => (
-            <ProjectCard 
-               key={project.id} 
-               project={project} 
-               onArchive={() => handleArchive(project.id)} 
-               onDelete={() => handleDelete(project.id)}
-            />
-          ))}
+          {
+            (view === 'all' ? allProjects : (view === 'archived' ? allProjects.filter(p => p.isArchived) : projects)).map((project: any) => (
+              <ProjectCard 
+                 key={project.id} 
+                 project={project} 
+                 onArchive={() => handleArchive(project.id)} 
+                 onDelete={() => handleDelete(project.id)}
+              />
+            ))
+          }
           {projects.length === 0 && (
             <div className="col-span-full py-20 text-center flex flex-col items-center">
                <div className="h-16 w-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 mb-4 mb-4">

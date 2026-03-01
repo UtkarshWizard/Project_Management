@@ -7,6 +7,7 @@ import {
   CreditCard, 
   LogOut, 
   User, 
+    Users, 
   Box,
   TrendingUp
 } from "lucide-react";
@@ -19,6 +20,7 @@ export default function Navbar() {
   const navItems = [
     { name: "Dashboard", path: "/", icon: LayoutDashboard },
     { name: "Projects", path: "/projects", icon: FolderKanban },
+     { name: "Members", path: "/members", icon: Users },
     { name: "Subscription", path: "/subscription", icon: CreditCard },
     { name: "Advanced Analytics", path: "/analytics/advanced", icon: TrendingUp },
   ];

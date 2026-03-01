@@ -78,8 +78,8 @@ export default function AdvancedAnalytics() {
          <Zap size={50} className="text-white fill-white" />
       </div>
       <div className="relative z-10 space-y-4 max-w-lg">
-         <h2 className="text-5xl font-black text-slate-900 dark:text-white leading-tight">Unlock Advanced Insights</h2>
-         <p className="text-slate-500 dark:text-slate-400 text-xl font-medium">Upgrade to PRO or ENTERPRISE to see deep performance metrics and team velocity charts.</p>
+         <h2 className="text-5xl font-black text-slate-900 dark:text-white leading-tight">Advanced Analytics</h2>
+         <p className="text-slate-500 dark:text-slate-400 text-xl font-medium">Advanced analytics are available on higher plans. Upgrade to Enterprise to unlock them.</p>
       </div>
       <motion.button 
         whileHover={{ scale: 1.05 }}
@@ -92,55 +92,52 @@ export default function AdvancedAnalytics() {
     </div>
   );
 
-  const getVelocityData = () => {
-    const monthlyCount: Record<string, number> = {};
-    (analytics.projects || []).forEach((p: any) => {
-        const month = p.createdAt ? new Date(p.createdAt).toISOString().slice(0, 7) : 'now';
-        monthlyCount[month] = (monthlyCount[month] || 0) + 1;
-    });
-    return Object.keys(monthlyCount).length > 0 ? Object.values(monthlyCount) : [12, 19, 3, 5, 2, 3];
-  }
+  // Build monthly labels and values from backend monthlyCount (keys like YYYY-MM)
+  const monthlyLabels = analytics && analytics.monthlyCount
+    ? Object.keys(analytics.monthlyCount).sort()
+    : [];
+
+  const monthlyValues = analytics && analytics.monthlyCount
+    ? monthlyLabels.map((k: string) => analytics.monthlyCount[k])
+    : [];
 
   const lineData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    labels: monthlyLabels.length > 0 ? monthlyLabels : ['No data'],
     datasets: [
       {
-        label: 'Velocity',
-        data: getVelocityData(),
+        label: 'Projects Created',
+        data: monthlyValues.length > 0 ? monthlyValues : [0],
         borderColor: '#0ea5e9',
         backgroundColor: 'rgba(14, 165, 233, 0.1)',
         fill: true,
         tension: 0.4,
-        borderWidth: 4,
-        pointRadius: 6,
-        pointBackgroundColor: '#fff',
-        pointBorderColor: '#0ea5e9',
-        pointBorderWidth: 2,
+        borderWidth: 3,
+        pointRadius: 4,
       },
     ],
   };
 
   const barData = {
-    labels: ['Project A', 'Project B', 'Project C', 'Project D', 'Project E'],
-    datasets: [
-       {
-         label: 'Hours Spent',
-         data: analytics.projectActiveCount ? [analytics.projectActiveCount, analytics.projectArchiveCount, analytics.usageCount] : [30, 45, 12, 67, 34],
-         backgroundColor: '#8b5cf6',
-         borderRadius: 12,
-         barThickness: 40,
-       }
-    ]
-  }
-
-  const pieData = {
-    labels: ['Completed', 'In Progress', 'Blocked'],
+    labels: ['Active Projects', 'Archived Projects', 'Usage Events'],
     datasets: [
       {
-        data: [analytics.projectActiveCount || 10, analytics.projectArchiveCount || 5, analytics.usageCount || 2],
-        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+        label: 'Count',
+        data: [analytics.projectActiveCount || 0, analytics.projectArchiveCount || 0, analytics.usageCount || 0],
+        backgroundColor: ['#06b6d4', '#8b5cf6', '#f59e0b'],
+        borderRadius: 12,
+        barThickness: 36,
+      },
+    ],
+  };
+
+  const pieData = {
+    labels: ['Active', 'Archived', 'Usage'],
+    datasets: [
+      {
+        data: [analytics.projectActiveCount || 0, analytics.projectArchiveCount || 0, analytics.usageCount || 0],
+        backgroundColor: ['#10b981', '#8b5cf6', '#f59e0b'],
         borderWidth: 0,
-        hoverOffset: 15,
+        hoverOffset: 12,
       },
     ],
   };
@@ -186,87 +183,51 @@ export default function AdvancedAnalytics() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-         <StatsCard 
-            label="Avg. Velocity" 
-            value={`${analytics.velocity || 86}%`} 
-            change="+12.5%" 
-            icon={<Activity size={24} className="text-primary-500" />} 
-            description="Across all active projects"
-         />
-         <StatsCard 
-            label="Efficiency" 
-            value={`${analytics.efficiency || 92}%`} 
-            change="+5.2%" 
-            icon={<Target size={24} className="text-emerald-500" />} 
-            description="Resource allocation score"
-            positive
-         />
-         <StatsCard 
-            label="Active Users" 
-            value={analytics.activeUsers || 24} 
-            change="+4" 
-            icon={<Users size={24} className="text-indigo-500" />} 
-            description="Peak concurrency today"
-         />
-         <StatsCard 
-            label="Bottlenecks" 
-            value={analytics.bottlenecks || 3} 
-            change="-1" 
-            icon={<Layers size={24} className="text-rose-500" />} 
-            description="Issues requiring attention"
-            negative
-         />
+        <StatsCard 
+          label="Total Projects" 
+          value={analytics.projectCount ?? 0} 
+          change={undefined} 
+          icon={<BarChart3 size={24} className="text-primary-500" />} 
+          description="All projects in your organization"
+        />
+        <StatsCard 
+          label="Active Projects" 
+          value={analytics.projectActiveCount ?? 0} 
+          icon={<Activity size={24} className="text-emerald-500" />} 
+          description="Currently active projects"
+        />
+        <StatsCard 
+          label="Archived Projects" 
+          value={analytics.projectArchiveCount ?? 0} 
+          icon={<Layers size={24} className="text-indigo-500" />} 
+          description="Projects stored as archived"
+        />
+        <StatsCard 
+          label="Members" 
+          value={analytics.memberCount ?? 0} 
+          icon={<Users size={24} className="text-rose-500" />} 
+          description="Active members in org"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <ChartContainer title="Velocity Trends" subtitle="Task completion rate over time" icon={<TrendingUp size={20} />}>
-           <div className="h-[350px]">
-             <Line data={lineData} options={chartOptions} />
-           </div>
+        <ChartContainer title="Resource Distribution" subtitle="Projects vs Members" icon={<BarChart3 size={20} />}>
+          <div className="h-[350px]">
+           <Bar data={barData} options={chartOptions} />
+          </div>
         </ChartContainer>
 
-        <ChartContainer title="Resource Distribution" subtitle="Hours allocation by project" icon={<BarChart3 size={20} />}>
-           <div className="h-[350px]">
-             <Bar data={barData} options={chartOptions} />
+        <ChartContainer title="Project Status Breakdown" subtitle="Active vs Archived Projects" icon={<PieChart size={20} />}>
+          <div className="h-[350px] flex items-center justify-center relative">
+           <div className="h-[280px] w-[280px]">
+             <Pie data={pieData} options={{ ...chartOptions, scales: { x: { display: false }, y: { display: false } } }} />
            </div>
-        </ChartContainer>
-
-        <ChartContainer title="Project Status Breakdown" subtitle="Current workflow state distribution" icon={<PieChart size={20} />}>
-           <div className="h-[350px] flex items-center justify-center relative">
-             <div className="h-[280px] w-[280px]">
-                <Pie data={pieData} options={{ ...chartOptions, scales: { x: { display: false }, y: { display: false } } }} />
-             </div>
-             <div className="absolute flex flex-col items-center">
-                <span className="text-3xl font-black">{analytics.totalTasks || 42}</span>
-                <span className="text-xs text-slate-500 font-bold">TASKS</span>
-             </div>
+           <div className="absolute flex flex-col items-center">
+             <span className="text-3xl font-black">{(analytics.projectActiveCount ?? 0) + (analytics.projectArchiveCount ?? 0)}</span>
+             <span className="text-xs text-slate-500 font-bold">PROJECTS</span>
            </div>
+          </div>
         </ChartContainer>
-
-        <div className="space-y-8">
-           <ChartContainer title="Real-time Events" subtitle="Latest system interactions" icon={<Activity size={20} />}>
-              <div className="space-y-6">
-                 {[1,2,3,4].map(i => (
-                    <div key={i} className="flex items-center gap-4 group">
-                       <div className="h-12 w-12 rounded-2xl bg-slate-50 dark:bg-slate-900 border dark:border-slate-800 flex items-center justify-center shrink-0 group-hover:bg-primary-500 group-hover:text-white transition-all duration-300">
-                          <MousePointer2 size={24} className="rotate-45" />
-                       </div>
-                       <div className="flex-grow">
-                          <div className="flex justify-between items-center mb-1">
-                             <h4 className="font-bold text-slate-900 dark:text-white">API Call Optimization</h4>
-                             <span className="text-xs text-slate-400 font-medium">2m ago</span>
-                          </div>
-                          <p className="text-sm text-slate-500">Latency reduced by 40ms in region us-east</p>
-                       </div>
-                    </div>
-                 ))}
-                 <button className="w-full py-4 bg-slate-50 dark:bg-slate-900 rounded-2xl font-bold flex items-center justify-center gap-2 text-slate-600 hover:bg-slate-100 transition-colors mt-4">
-                    View Full Logs
-                    <ChevronRight size={18} />
-                 </button>
-              </div>
-           </ChartContainer>
-        </div>
       </div>
     </div>
   );

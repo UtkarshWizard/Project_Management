@@ -41,7 +41,7 @@ export default function Subscription() {
 
   const plans = [
     {
-      name: "Basic",
+      name: "Free",
       price: "$0",
       description: "Perfect for individuals and side-projects",
       features: ["Up to 3 Projects", "Basic Analytics", "Community Support", "Single User"],

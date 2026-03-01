@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Subscription from "./pages/Subscription";
 import AdvancedAnalytics from "./pages/AdvancedAnalytics";
+import Members from "./pages/Members";
 import "./App.css";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -47,6 +48,12 @@ function App() {
           <Route path="/analytics/advanced" element={
             <ProtectedRoute>
               <AdvancedAnalytics />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/members" element={
+            <ProtectedRoute>
+              <Members />
             </ProtectedRoute>
           } />
 
