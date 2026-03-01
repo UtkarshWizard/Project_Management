@@ -6,8 +6,6 @@ import {
   Plus, 
   Archive, 
   Trash2, 
-  Search, 
-  Filter, 
   FolderIcon, 
   Clock, 
   CheckCircle,
