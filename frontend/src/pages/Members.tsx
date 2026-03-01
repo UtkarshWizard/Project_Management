@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import { toast } from "sonner";
-import { Plus, UserPlus, Loader2, Trash2 } from "lucide-react";
+import { Plus, UserPlus, Loader2} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Members() {
@@ -81,7 +81,7 @@ export default function Members() {
           {members.map(m => (
             <div key={m.id} className="flex items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-xl border dark:border-slate-800">
               <div>
-                <div className="font-bold">{m.name}</div>
+                <div className="font-bold text-white">{m.name}</div>
                 <div className="text-sm text-slate-500">{m.email}</div>
               </div>
               <div className="text-sm text-slate-400">{new Date(m.createdAt).toLocaleDateString()}</div>
@@ -98,7 +98,7 @@ export default function Members() {
           <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowAdd(false)} className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" />
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl p-6 border dark:border-slate-800">
-              <h3 className="text-xl font-bold mb-4">Add Member</h3>
+              <h3 className="text-xl text-gray-200 font-bold mb-4">Add Member</h3>
               <form onSubmit={handleAdd} className="space-y-4">
                 <input value={name} onChange={e => setName(e.target.value)} required placeholder="Name" className="w-full h-11 px-3" />
                 <input value={email} onChange={e => setEmail(e.target.value)} required type="email" placeholder="Email" className="w-full h-11 px-3" />

@@ -134,7 +134,7 @@ export default function Projects() {
             All
           </button>
         </div>
-        <div className="text-sm text-slate-500">Total projects: {totalProjectsCount}</div>
+        <div className="text-sm text-slate-300">Total projects: {totalProjectsCount}</div>
       </div>
       {limitReached && (
         <motion.div 
@@ -167,7 +167,7 @@ export default function Projects() {
         <div className="flex gap-3">
           <button 
             onClick={handleExport}
-            className="btn-outline flex items-center gap-2 group h-12 px-6"
+            className="btn-outline text-white flex items-center gap-2 group h-12 px-6"
           >
             <FileDown size={18} />
             Export Data
@@ -181,21 +181,6 @@ export default function Projects() {
             {limitReached ? "Limit Reached" : "New Project"}
           </button>
         </div>
-      </div>
-
-      <div className="flex items-center gap-4 p-4 glass rounded-2xl border dark:border-slate-800">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input 
-            type="text" 
-            placeholder="Search projects..." 
-            className="w-full bg-white dark:bg-slate-900 pl-10 h-11 border-none focus:ring-0"
-          />
-        </div>
-        <button className="flex items-center gap-2 h-11 px-6 font-medium bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-          <Filter size={18} />
-          Filter
-        </button>
       </div>
 
       {loading ? (
@@ -222,7 +207,7 @@ export default function Projects() {
           }
           {projects.length === 0 && (
             <div className="col-span-full py-20 text-center flex flex-col items-center">
-               <div className="h-16 w-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 mb-4 mb-4">
+               <div className="h-16 w-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 mb-4">
                  <FolderIcon size={40} />
                </div>
                <h3 className="font-bold text-xl dark:text-white">No projects found</h3>

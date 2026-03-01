@@ -5,13 +5,10 @@ import {
   BarChart3, 
   PieChart, 
   Activity, 
-  TrendingUp, 
-  Target, 
   Zap, 
   Users, 
   Calendar,
   Layers,
-  MousePointer2,
   Clock,
   ArrowUpRight,
   ChevronRight,
@@ -32,7 +29,7 @@ import {
   Legend,
   Filler
 } from 'chart.js';
-import { Line, Bar, Pie } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
@@ -92,30 +89,6 @@ export default function AdvancedAnalytics() {
     </div>
   );
 
-  // Build monthly labels and values from backend monthlyCount (keys like YYYY-MM)
-  const monthlyLabels = analytics && analytics.monthlyCount
-    ? Object.keys(analytics.monthlyCount).sort()
-    : [];
-
-  const monthlyValues = analytics && analytics.monthlyCount
-    ? monthlyLabels.map((k: string) => analytics.monthlyCount[k])
-    : [];
-
-  const lineData = {
-    labels: monthlyLabels.length > 0 ? monthlyLabels : ['No data'],
-    datasets: [
-      {
-        label: 'Projects Created',
-        data: monthlyValues.length > 0 ? monthlyValues : [0],
-        borderColor: '#0ea5e9',
-        backgroundColor: 'rgba(14, 165, 233, 0.1)',
-        fill: true,
-        tension: 0.4,
-        borderWidth: 3,
-        pointRadius: 4,
-      },
-    ],
-  };
 
   const barData = {
     labels: ['Active Projects', 'Archived Projects', 'Usage Events'],
@@ -242,7 +215,7 @@ function StatsCard({ label, value, change, icon, description, positive, negative
       <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-slate-50 dark:bg-slate-800/30 rounded-full group-hover:scale-125 transition-transform duration-500" />
       <div className="relative z-10 flex flex-col h-full">
          <div className="flex items-center justify-between mb-8">
-            <div className="h-14 w-14 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-primary-500 shadow-inner group-hover:bg-white dark:group-hover:bg-slate-900 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] transition-all">
+            <div className="h-14 w-14 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-primary-500 group-hover:bg-white dark:group-hover:bg-slate-900 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] transition-all">
                {icon}
             </div>
             <div className={`flex items-center gap-1 font-black text-sm ${positive ? 'text-emerald-500' : negative ? 'text-rose-500' : 'text-primary-500'}`}>
