@@ -61,8 +61,8 @@ Example:
 prisma.project.findMany({
   where: { organizationId: req.organizationId }
 }); 
+```
 This ensures strict row-level tenant isolation.
-
 ---
 
 ## Subscription Model
@@ -97,7 +97,7 @@ Access is checked dynamically via middleware:
 
 ```ts
 requireFeature("FEATURE_CODE")
-
+```
 ---
 
 No plan names are hardcoded in the backend.
